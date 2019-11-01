@@ -1,7 +1,10 @@
 package com.bonc.flink.util
 
 import java.util
+
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig
 import redis.clients.jedis.{HostAndPort, JedisCluster}
+
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 
@@ -167,6 +170,9 @@ object RedisClient {
     Some(clients.ttl(key))
   }
 
+  def main(args: Array[String]): Unit = {
+    println()
+  }
 
 }
 
@@ -181,11 +187,12 @@ object RedisConnector {
   jedisClusterNodes.add(new HostAndPort("172.16.125.33", 8006))
   jedisClusterNodes.add(new HostAndPort("172.16.22.156",6379))
 
-  val clients = new JedisCluster(jedisClusterNodes)
+  val clients = new JedisCluster(jedisClusterNodes,3000,3000,3,"xingda",new GenericObjectPoolConfig)
 
 }
 
 
+/*
 object MainClass {
   def main(args: Array[String]): Unit = {
     val dao = RedisClient
@@ -211,3 +218,4 @@ object MainClass {
   }
 
 }
+*/

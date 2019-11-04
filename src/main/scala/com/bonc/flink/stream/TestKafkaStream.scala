@@ -9,12 +9,15 @@ import org.apache.flink.api.common.serialization.{DeserializationSchema, SimpleS
 import org.apache.flink.api.java.tuple.{Tuple, Tuple2}
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.module.SimpleDeserializers
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.node.ObjectNode
+import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction
+import org.apache.flink.streaming.api.watermark.Watermark
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.streaming.util.serialization.{AbstractDeserializationSchema, JSONKeyValueDeserializationSchema, KeyedDeserializationSchemaWrapper, TypeInformationKeyValueSerializationSchema}
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.Partitioner
 
 
@@ -33,6 +36,7 @@ object TestKafkaStream {
     properties.setProperty("bootstrap.servers", "zb6:9092,zb5:9092,zb3:9092")
     properties.setProperty("zookeeper.connect", "zb1:2181")
     properties.setProperty("group.id", "mwx_group")
+    properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,"true")
     //    properties.setProperty("flink.partition-discovery.interval-millis", PropertyUtil.getProperty("kafka.partition-discovery.interval-millis"))
 
     // 添加数据源,可以用simpleStringSchema
@@ -49,7 +53,8 @@ object TestKafkaStream {
     //    })
     // 设置执行并行度
     val keyedStream = sourceData.keyBy(0)
-      .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+      //.window(TumblingEventTimeWindows.of(Time.seconds(10)))
+      .countWindow(2)
       .allowedLateness(Time.seconds(5))
       .reduce((t1,t2)=>new Tuple2[String,String](t1.f0,t1.f1+t2.f1))
       .print()

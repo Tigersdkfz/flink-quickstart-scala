@@ -13,7 +13,7 @@ import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction
 import org.apache.flink.streaming.api.watermark.Watermark
-import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
+import org.apache.flink.streaming.api.windowing.assigners.{SlidingEventTimeWindows, TumblingEventTimeWindows}
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.streaming.util.serialization.{AbstractDeserializationSchema, JSONKeyValueDeserializationSchema, KeyedDeserializationSchemaWrapper, TypeInformationKeyValueSerializationSchema}
@@ -54,7 +54,8 @@ object TestKafkaStream {
     // 设置执行并行度
     val keyedStream = sourceData.keyBy(0)
       //.window(TumblingEventTimeWindows.of(Time.seconds(10)))
-      .countWindow(2)
+      .countWindow(3)
+      //.window(SlidingEventTimeWindows.of(Time.seconds(10), Time.seconds(5)))
       .allowedLateness(Time.seconds(5))
       .reduce((t1,t2)=>new Tuple2[String,String](t1.f0,t1.f1+t2.f1))
       .print()

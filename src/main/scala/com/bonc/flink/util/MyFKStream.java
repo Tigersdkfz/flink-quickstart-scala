@@ -27,10 +27,13 @@ public class MyFKStream implements KeyedDeserializationSchema<Tuple2<String,Stri
         }
         if (messageKey!=null){tuple2.f0 = messageKey.toString();}
         else {
-            int i = (int) (Math.random()*3);
-            tuple2.f0="kong"+i;
+            //int i = (int) (Math.random()*3);
+            //tuple2.f0="kong"+i;
+            //这里对根据逗号分隔的第一个字符进行赋K值，到Tuple的1上，若是按照整数值分为三个并行度，因为key只有三个
+            tuple2.f0=tuple2.f1.split(",")[0];
         }
         return tuple2;
+
     }
 
     @Override

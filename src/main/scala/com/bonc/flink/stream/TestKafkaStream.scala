@@ -61,6 +61,7 @@ object TestKafkaStream {
       .print()
 
     // 设置数据持久的类
+    keyedStream.name("ceshi keyby de suanzi")
     //text.print()
     // execute program
     environment.execute("FlinkJob")

@@ -171,6 +171,13 @@ object RedisClient {
   }
 
   def main(args: Array[String]): Unit = {
+
+    //clients.set("matest","777")
+    //print(clients.get("matest"));
+    //print(clients.get("_CACHE_SY_SERV_DICT".getBytes("UTF-8")));
+    //print(clients.hget("_CACHE_SY_SERV_DICT","GA_GATEWAY_PROTOCOL"));
+    //print(clients.hmget("_CACHE_SY_SERV_DICT","GA_GATEWAY_PROTOCOL"));
+    print(clients.mget("age"));
     println()
   }
 
@@ -185,9 +192,10 @@ object RedisConnector {
   jedisClusterNodes.add(new HostAndPort("172.16.125.33", 8004))
   jedisClusterNodes.add(new HostAndPort("172.16.125.33", 8005))
   jedisClusterNodes.add(new HostAndPort("172.16.125.33", 8006))
-  jedisClusterNodes.add(new HostAndPort("172.16.22.156",6379))
+  //jedisClusterNodes.add(new HostAndPort("172.16.22.156",6379))
 
-  val clients = new JedisCluster(jedisClusterNodes,3000,3000,3,"xingda",new GenericObjectPoolConfig)
+  //val clients = new JedisCluster(jedisClusterNodes,3000,3000,3,"xingda",new GenericObjectPoolConfig)
+  val clients = new JedisCluster(jedisClusterNodes,3000,3000,3,new GenericObjectPoolConfig)
 
 }
 

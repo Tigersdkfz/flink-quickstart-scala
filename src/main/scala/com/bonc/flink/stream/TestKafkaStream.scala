@@ -7,6 +7,7 @@ import org.apache.flink.api.common.ExecutionConfig
 import org.apache.flink.api.common.functions.ReduceFunction
 import org.apache.flink.api.common.serialization.{DeserializationSchema, SimpleStringSchema}
 import org.apache.flink.api.java.tuple.{Tuple, Tuple2}
+import org.apache.flink.configuration.Configuration
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.module.SimpleDeserializers
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks
@@ -58,6 +59,10 @@ object TestKafkaStream {
       //.window(SlidingEventTimeWindows.of(Time.seconds(10), Time.seconds(5)))
       .allowedLateness(Time.seconds(5))
       .reduce((t1,t2)=>new Tuple2[String,String](t1.f0,t1.f1+t2.f1))
+//      .process(new ProcessWindowFunction[Tuple2[String,String],String,String,WindowedStream] {
+//        override def open(parameters: Configuration): Unit = super.open(parameters)
+//      }
+//      )
       .print()
 
     // 设置数据持久的类

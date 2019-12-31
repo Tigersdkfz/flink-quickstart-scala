@@ -1,6 +1,7 @@
 package com.bonc.flink.util;
 
 import org.apache.commons.lang3.StringUtils;
+import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.ShardedJedisPool;
@@ -34,7 +35,7 @@ public class JedisPool {
             JedisPoolConfig config=initConfig();
             List<JedisShardInfo> shards=new ArrayList<JedisShardInfo>();
             String host="172.16.125.163:8001,172.16.125.163:8002,172.16.125.163:8003," +
-                    "172.16.125.33:8004,172.16.125.33:8005,172.16.125.33:8006";//服务器地址,密码
+                    "172.16.125.33:8004,172.16.125.33:8005,172.16.125.33:8006,172.16.22.156:6379";//服务器地址,密码
             Set<String> hosts=init(host);
             for (String hs:hosts){
                 String[] values=hs.split(":");
@@ -45,6 +46,7 @@ public class JedisPool {
                 shards.add(shard);
             }
             pool=new ShardedJedisPool(config,shards);
+
         }catch (Exception e){
             e.printStackTrace();
         }

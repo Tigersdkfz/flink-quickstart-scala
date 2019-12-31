@@ -34,8 +34,10 @@ object TestKafkaStream {
     import org.apache.flink.streaming.api.scala._
     val environment = StreamExecutionEnvironment.getExecutionEnvironment
     val properties = new Properties();
-    properties.setProperty("bootstrap.servers", "zb6:9092,zb5:9092,zb3:9092")
-    properties.setProperty("zookeeper.connect", "zb1:2181")
+    //properties.setProperty("bootstrap.servers", "zb6:9092,zb5:9092,zb3:9092")
+    properties.setProperty("bootstrap.servers", "172.16.125.25:9092,172.16.125.27:9092,172.16.125.156:9092,172.16.125.157:9092")
+    //properties.setProperty("zookeeper.connect", "zb1:2181")
+    properties.setProperty("zookeeper.connect", "172.16.125.25:2181")
     properties.setProperty("group.id", "mwx_group")
     properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,"true")
     //    properties.setProperty("flink.partition-discovery.interval-millis", PropertyUtil.getProperty("kafka.partition-discovery.interval-millis"))
@@ -46,7 +48,7 @@ object TestKafkaStream {
 
     //val source:DataStream[Tuple2[String,String]] = environment.addSource(new FlinkKafkaConsumer("flumeCount",new TypeInformationKeyValueSerializationSchema[String,String](classOf[String],classOf[String],environment.getConfig),properties))
     //这里注意scala和java的tuple2，并不一样，要用啥都用啥，2019.10.29
-    val sourceData: DataStream[Tuple2[String,String]] = environment.addSource(new FlinkKafkaConsumer[Tuple2[String,String]]("flumeCount",new MyFKStream,properties))
+    val sourceData: DataStream[Tuple2[String,String]] = environment.addSource(new FlinkKafkaConsumer[Tuple2[String,String]]("mwxtest",new MyFKStream,properties))
     //text.filter(s=>s.contains(""))
     // 对数据源进行过滤
     //    text.addSink(fun = > {
@@ -55,7 +57,7 @@ object TestKafkaStream {
     // 设置执行并行度
     val keyedStream = sourceData.keyBy(0)
       //.window(TumblingEventTimeWindows.of(Time.seconds(10)))
-      .countWindow(3)
+      .countWindow(2)
       //.window(SlidingEventTimeWindows.of(Time.seconds(10), Time.seconds(5)))
       .allowedLateness(Time.seconds(5))
       .reduce((t1,t2)=>new Tuple2[String,String](t1.f0,t1.f1+t2.f1))

@@ -34,7 +34,7 @@ object StringUtils {
   }
   
   def main(args: Array[String]): Unit = {
-    MysqlUtils.insertInto("type1", new NullPointerException, "realData1", "ruleData1", "pointInfo1")
+   // MysqlUtils.insertInto("type1", new NullPointerException, "realData1", "ruleData1", "pointInfo1")
   }
   
 }

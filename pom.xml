@@ -80,6 +80,26 @@ under the License.
 			<!--<scope>provided</scope>-->
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-java</artifactId>
+			<version>${flink.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-streaming-java_2.11</artifactId>
+			<version>${flink.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-clients_2.11</artifactId>
+			<version>${flink.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-connector-wikiedits_2.11</artifactId>
+			<version>${flink.version}</version>
+		</dependency>
 		<!-- Add connector dependencies here. They must be in the default scope (compile). -->
 
 		<!-- Example:
@@ -120,6 +140,7 @@ under the License.
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
         </dependency>
+
 	</dependencies>
 
 	<build>
